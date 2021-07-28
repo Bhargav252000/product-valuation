@@ -17,7 +17,8 @@ import { UsersService } from '../users.service'
 export class CurrentUserInterceptor implements NestInterceptor {
   
   constructor(private usersService : UsersService){}
-
+  // context is incoming request 
+  // handler is the response to send and its like a chain (as a next() in express )
   async intercept(context : ExecutionContext, handler : CallHandler ){
     const request = context.switchToHttp().getRequest()
 
