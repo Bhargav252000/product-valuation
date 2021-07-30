@@ -46,10 +46,12 @@ describe('AuthService', () => {
     service = module.get<AuthService>(AuthService);
   });
 
+  //! demo test
   it('can create an instance of auth service', async () => {
     expect(service).toBeDefined();
   });
 
+  //! 1st Test
   //! creates a test for signup only
   it('creates a new user with a salted and hashed password', async () => {
     const user = await service.signup(
@@ -64,6 +66,7 @@ describe('AuthService', () => {
     expect(hash).toBeDefined();
   });
 
+  //! 2nd Test
   it('throws an error if user signs up with email that is in use', async () => {
     // fakeUsersService.find = () =>
     //   Promise.resolve([
@@ -81,6 +84,7 @@ describe('AuthService', () => {
     }
   });
 
+  //! 3rd Test
   it('throws an error if signin is called with an unused email', async () => {
     try {
       await service.signin('sdfsd', 'dsfsd@gmail.com', 'asbjsndjna');
@@ -90,6 +94,7 @@ describe('AuthService', () => {
     }
   });
 
+  //! 4th Test
   it('throws if an invalid password is provided', async () => {
     // we are testing if the invalid password is provided in signin process 
 
@@ -102,6 +107,7 @@ describe('AuthService', () => {
     }
   });
 
+  //! 5th Test
   it('returns a user if correct password is provided', async () => {
     
     await service.signup('bhargav', 'dfhbak@sjfba.com', 'bhargav');
