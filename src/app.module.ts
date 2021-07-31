@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
 // typeorm module
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -11,21 +12,56 @@ import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
 
 // Entity modules
-import { User } from './users/users.entity'
+import { User } from './users/users.entity';
 import { Report } from './reports/reports.entity';
+const cookieSession = require('cookie-session');
+
+// imports for configuration
+import { ConfigModule, ConfigService } from '@nestjs/config'
+
+require('dotenv').config();
 
 @Module({
+  // configModule is used for .env using nest way
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'db.sqlite',
-      entities: [User, Report],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal : true,
+      envFilePath : `.env.${process.env.NODE_ENV}`
+    }),
+    TypeOrmModule.forRootAsync({
+      inject : [ConfigService],
+      useFactory : (config : ConfigService) => {
+        return {
+          type : 'sqlite',
+          database : config.get<string>('DB_NAME'),
+          synchronize : true,
+          entities : [User, Report],
+        }
+      }
     }),
     UsersModule,
     ReportsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+      }),
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule {
+  //! we used this method mainly for testing, because we have to use the cookieSession globally
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(
+        cookieSession({
+          keys: [`${process.env.SESSION_KEY}`],
+        }),
+      )
+      .forRoutes('*'); // means for every request 
+  }
+}
