@@ -17,7 +17,7 @@ import { Report } from './reports/reports.entity';
 const cookieSession = require('cookie-session');
 
 // imports for configuration
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 require('dotenv').config();
 
@@ -25,19 +25,19 @@ require('dotenv').config();
   // configModule is used for .env using nest way
   imports: [
     ConfigModule.forRoot({
-      isGlobal : true,
-      envFilePath : `.env.${process.env.NODE_ENV}`
+      isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
     TypeOrmModule.forRootAsync({
-      inject : [ConfigService],
-      useFactory : (config : ConfigService) => {
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
         return {
-          type : 'sqlite',
-          database : config.get<string>('DB_NAME'),
-          synchronize : true,
-          entities : [User, Report],
-        }
-      }
+          type: 'sqlite',
+          database: config.get<string>('DB_NAME'),
+          synchronize: true,
+          entities: [User, Report],
+        };
+      },
     }),
     UsersModule,
     ReportsModule,
@@ -54,7 +54,7 @@ require('dotenv').config();
   ],
 })
 export class AppModule {
-  //! we used this method mainly for testing, because we have to use the cookieSession globally
+  //! configure is a method that will make the middleware globally available (means for every request it will be applied)
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
@@ -62,6 +62,6 @@ export class AppModule {
           keys: [`${process.env.SESSION_KEY}`],
         }),
       )
-      .forRoutes('*'); // means for every request 
+      .forRoutes('*'); // means for every request
   }
 }
