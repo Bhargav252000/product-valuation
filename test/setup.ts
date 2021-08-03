@@ -1,16 +1,14 @@
-import { rm } from 'fs/promises'
-import { join } from 'path'
-import { getConnection } from 'typeorm'
+import { rm } from 'fs/promises';
+import { join } from 'path';
+import { getConnection } from 'typeorm';
 
 global.beforeEach(async () => {
-
-  try{
-    await rm(join(__dirname, '..', 'test.sqlite'))
-  }catch(err){}
-
+  try {
+    await rm(join(__dirname, '..', 'test.sqlite'));
+  } catch (err) {}
 });
 
 global.afterEach(async () => {
-  await getConnection().close()
-})
-
+  const conn = getConnection();
+  await conn.close();
+});

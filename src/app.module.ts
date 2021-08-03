@@ -28,17 +28,7 @@ require('dotenv').config();
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        return {
-          type: 'sqlite',
-          database: config.get<string>('DB_NAME'),
-          synchronize: true,
-          entities: [User, Report],
-        };
-      },
-    }),
+    TypeOrmModule.forRoot(),
     UsersModule,
     ReportsModule,
   ],
@@ -54,12 +44,15 @@ require('dotenv').config();
   ],
 })
 export class AppModule {
+
+  constructor(private configService : ConfigService) {}
+
   //! configure is a method that will make the middleware globally available (means for every request it will be applied)
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
         cookieSession({
-          keys: [`${process.env.SESSION_KEY}`],
+          keys: [this.configService.get<string>('SESSION_KEY')],
         }),
       )
       .forRoutes('*'); // means for every request

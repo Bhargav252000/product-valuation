@@ -21,7 +21,7 @@ import { Serialize } from '../interceptors/serialize.interceptor';
 // Entity
 import { User } from '../users/users.entity';
 //Guards
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 import { AdminGuard } from '../guards/admin.guard';
 
 @Controller('reports')
