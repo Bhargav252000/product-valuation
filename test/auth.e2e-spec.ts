@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
-describe(' Authentication System', () => {
+describe('Authentication System', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -17,7 +17,7 @@ describe(' Authentication System', () => {
   });
 
   //! 1st test
-  it('handles a signup request', () => {
+  it('handles a signup request', async () => {
     const user = {
       name: 'newname',
       email: 'testtingnewemail@gmail.com',

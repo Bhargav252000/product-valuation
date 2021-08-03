@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { UsersService } from '../users/users.service';
-import { User } from '../users/users.entity';
+import { UsersService } from '../users.service';
+import { User } from '../users.entity';
 
 // this is used because the request doesnt know what is the interface of the currentUser is
 // so we are adding a property to the request object that currentUser has a User instance

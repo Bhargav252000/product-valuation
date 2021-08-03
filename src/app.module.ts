@@ -19,8 +19,6 @@ const cookieSession = require('cookie-session');
 // imports for configuration
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-require('dotenv').config();
-
 @Module({
   // configModule is used for .env using nest way
   imports: [
